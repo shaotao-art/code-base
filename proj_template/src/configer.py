@@ -8,6 +8,7 @@ class Configer:
             'l_r': 1e-4,
             'b_s': 64,
             'num_workers': 2,
+            'ckp_path': './ckp',
             'model_save_path': './ckp/model.ckp'
         }    
 
