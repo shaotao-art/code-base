@@ -5,10 +5,17 @@ import torch.nn.functional as F
 class NNet(nn.Module):
     def __init__(self) -> None:
         super(NNet, self).__init__()
-        raise NotImplementedError
+        self.fc1 = nn.Linear(28*28, 512)
+        self.fc2 = nn.Linear(512, 256)
+        self.fc3 = nn.Linear(256, 10)
+        self.dropout = nn.Dropout(p=0.2)
 
     def forward(self, x):
-        raise NotImplementedError
+        x = x.view(-1, 28*28)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
 
     def _init_params(self):
         pass

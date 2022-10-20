@@ -4,8 +4,9 @@ from torchvision import transforms
 class PreProcessor():
     def __init__(self):
         self.T = transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.5], std=[0.5])
+            transforms.Resize((28, 28)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5], std=[0.5])
             ])
 
     def __call__(self, x):

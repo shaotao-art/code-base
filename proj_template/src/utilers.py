@@ -1,11 +1,12 @@
 import pathlib
 import numpy as np
 import torch
-from configer import Configer
+from src.configer import Configer
 
 
+configer = Configer()
 class Utiler:
-    def __init__(self, model_save_path=Configer.params['model_save_path'], ckp_path=Configer.params['ckp_path'], seed=2022) -> None:
+    def __init__(self, model_save_path=configer.params['model_save_path'], ckp_path=configer.params['ckp_path'], seed=2022) -> None:
         self.ckp_path = ckp_path
         self.model_save_path = model_save_path
         self.seed = seed

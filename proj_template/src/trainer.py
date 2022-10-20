@@ -1,21 +1,22 @@
 import time
-from loops import train_step, valid
+from src.loops import train_step, valid
+import torch
 
 class Trainer():
     def __init__(self, num_epoch) -> None:
         self.num_epoch = num_epoch
 
     def _train_step(self, model, batch, criterion, device):
-        train_step(model, batch, criterion, device)
+        return train_step(model, batch, criterion, device)
 
     def _validation_steps(self, dataloader, model, device):
-        valid(dataloader, model, device)
+        return valid(dataloader, model, device)
     
     def run(self, train_dataloader, valid_dataloader, model, optimizer, criterion, start_epoch, utiler, device):
-        for _ in range(start_epoch, self.num_epoch):
-            cur_epoch = self._train_one_epoch(train_dataloader, model, optimizer, criterion, start_epoch, device)
-            self._validation(valid_dataloader, model, logger, device)
-            utiler.save_ckp(model, optimizer, cur_epoch)
+        for epoch in range(start_epoch, self.num_epoch):
+            self._train_one_epoch(train_dataloader, model, optimizer, criterion, epoch, device)
+            self._validation(valid_dataloader, model, device)
+            utiler.save_ckp(model, optimizer, epoch)
 
     def _train_one_epoch(self, dataloader, model, optimizer, criterion, cur_epoch, device):
         print('\nTraining...')
@@ -35,18 +36,12 @@ class Trainer():
             if i % (len(dataloader) // 10) == 0:
                 now = time.time()
                 time_used = int(now - start)
-                print(f'epoch:[{cur_epoch:>3d}/{self.num_epoch:>3d}],\
-                        batch:[{i:>3d}/{len(dataloader):>3d}],\
-                        time used: {(time_used // 60):>2d} min {(time_used % 60):>2d} sec, \
-                        loss:[{loss:>4f}]')
+                print(f'epoch:[{cur_epoch:>3d}/{self.num_epoch:>3d}], batch:[{i:>3d}/{len(dataloader):>3d}], time used: {(time_used // 60):>2d} min {(time_used % 60):>2d} sec, loss:[{loss:>4f}]')
 
         end = time.time()
         time_used = int(end - start)
 
-        print(f'epoch:[{cur_epoch:>3d} done!,\
-                        avg loss: {.1}, \
-                        time to run this epoch: {(time_used // 60):>2d} min {(time_used % 60):>2d} sec')
-        return cur_epoch + 1
+        print(f'\nepoch:[{cur_epoch:>3d} done!, avg loss: {torch.tensor(loss_lst).mean().item()}, time to run this epoch: {(time_used // 60):>2d} min {(time_used % 60):>2d} sec')
 
 
     def _validation(self, dataloader, model, device):

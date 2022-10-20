@@ -1,7 +1,7 @@
 from distutils.log import INFO
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-from cv_preprocess import PreProcessor
+from src.cv_preprocess import PreProcessor
 import torchvision
 import torch
 
@@ -43,7 +43,7 @@ def get_train_loader(configer, train_size=0.8, valid_b_s=32):
     N = len(dataset)
     N_train = int(N * train_size)
     N_valid = N - N_train
-    train_data, valid_data = torch.utils.data.random_spplit(dataset, [N_train, N_valid])    
+    train_data, valid_data = torch.utils.data.random_split(dataset, [N_train, N_valid])    
 
     b_s = configer.params['b_s']
     train_loader = DataLoader(train_data,
@@ -59,8 +59,8 @@ def get_train_loader(configer, train_size=0.8, valid_b_s=32):
     info_str += f'\ttraining set batch size: {b_s}\n'
     info_str += f'\ttraining set len dataloder: {len(train_loader)}\n'
     info_str += f'\tvalid set num samples: {len(valid_data)}\n'
-    info_str += f'\valid set batch size: {valid_b_s}\n'
-    info_str += f'\valid set len dataloder: {len(valid_loader)}\n'
+    info_str += f'\tvalid set batch size: {valid_b_s}\n'
+    info_str += f'\tvalid set len dataloder: {len(valid_loader)}\n'
     print(info_str)
     return train_loader, valid_loader
 
